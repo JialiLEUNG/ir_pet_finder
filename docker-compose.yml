@@ -1,0 +1,40 @@
+---
+version: '3.6'
+services:
+  elasticsearch_ir_pet_finder:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
+    container_name: elasticsearch_ir_pet_finder
+    ports: ['9200:9200']
+    networks: ['stack']
+    volumes:
+      - ./es_data:/usr/share/elasticsearch/data
+    environment:
+      - node.name=ir_pet_finder_01
+      - cluster.initial_master_nodes=ir_pet_finder_01
+      - cluster.name=ir_pet_finder_cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - stack
+
+  kibana_ir_pet_finder:
+    image: docker.elastic.co/kibana/kibana:7.8.0
+    container_name: kibana_ir_pet_finder
+    ports: ['5601:5601']
+    networks: ['stack']
+    depends_on: ['elasticsearch_ir_pet_finder']
+    networks:
+      - stack
+    environment:
+            ELASTICSEARCH_HOSTS: http://ir_pet_finder:9200
+
+networks: {stack: {}}
+
+# use docker volume to persist ES data outside of a container.
+volumes:
+  es_data:
+    driver: local
