@@ -138,8 +138,8 @@ public class PetServiceImpl implements PetService {
      * a Page.EMTPY object is returned, indicating zero results.
      * If there is data to parse,
      * then each hit,
-     * will be converted to a Product POJO
-     * and the list of products will be returned within the Page object.
+     * will be converted to a Pet POJO
+     * and the list of pets will be returned within the Page object.
      * @param searchRequest
      * @param query
      * @return

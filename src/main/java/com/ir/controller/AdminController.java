@@ -13,10 +13,19 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * The Admin controller exposes the admin endpoint for elasticsearch indexing
+ * the @Controller annotation is mapped to the following two paths:
+ * /admin
+ * /index_data
+ *
+ * To autowire a bean (e.g., indexService) into our code, we use @Inject.
+ */
+
 @Controller("/admin")
 public class AdminController {
 
-//    private final ProductIndexService indexService;
+//    private final PetIndexService indexService;
     private final PetIndexService indexService;
 
 
@@ -25,13 +34,19 @@ public class AdminController {
         this.indexService = indexService;
     }
 
+    /**
+     * This is an api for indexing the data
+     * @param numberOfPets
+     * @return
+     * @throws IOException
+     */
     @Post("/index_data")
-    public CompletableFuture<HttpStatus> index(@QueryValue Integer numberOfProducts) throws IOException {
-        if (numberOfProducts <= 0) {
-            numberOfProducts = 50000;
+    public CompletableFuture<HttpStatus> index(@QueryValue Integer numberOfPets) throws IOException {
+        if (numberOfPets <= 0) {
+            numberOfPets = 50000;
         }
 
-        return indexService.indexProducts(numberOfProducts);
+        return indexService.indexPets(numberOfPets);
     }
 
     @Post(value = "configure_synonyms", consumes = MediaType.APPLICATION_JSON)

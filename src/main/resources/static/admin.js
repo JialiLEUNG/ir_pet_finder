@@ -2,14 +2,14 @@ var app = new Vue({
     el: '#app',
     data: {
       message: "",
-      numberOfProducts: 100000,
+      numberOfPets: 100000,
       synonyms: 'orangsch => orange\nkfz => autos,\nplastikk => plastik'
     },
     methods: {
       reindex : function() {
         this.message = "Reindexing..."
         axios
-          .post("http://localhost:8080/admin/index_data?numberOfProducts=" + this.numberOfProducts)
+          .post("http://localhost:8080/admin/index_data?numberOfPets=" + this.numberOfPets)
           .then(response => ( this.message = "" ))
           .catch(error => this.message = "Error reindexing: " + JSON.stringify(error.response.data))
       },

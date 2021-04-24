@@ -10,3 +10,5 @@
 
 - [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
 
+The current project is inspired by https://spinscale.de/posts/2020-06-22-implementing-a-modern-ecommerce-search.html
+and its implementation at https://github.com/spinscale/

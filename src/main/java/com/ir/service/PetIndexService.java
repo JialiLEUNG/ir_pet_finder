@@ -26,6 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * By default, all beans are scoped as a prototype.
+ * We can quickly create singleton beans using @Singleton.
+ */
 @Singleton
 public class PetIndexService {
     private static final String index = "my_index";
@@ -70,7 +74,7 @@ public class PetIndexService {
      * @param count Number of pets to be created
      * @throws IOException
      */
-    public CompletableFuture<HttpStatus> indexProducts(int count) throws IOException {
+    public CompletableFuture<HttpStatus> indexPets(int count) throws IOException {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 petPreIndex();

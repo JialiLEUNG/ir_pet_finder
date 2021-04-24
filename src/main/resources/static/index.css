@@ -29,8 +29,8 @@ html, body, html * {
   --scale: 0;
   --tooltip-color: #333;
   --arrow-size: 10px;
-
   position: absolute;
+  float: right;
   top: -.25rem;
   left: 50%;
   transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
@@ -46,9 +46,10 @@ html, body, html * {
   content: attr(data-tooltip);
   color: white;
   padding: .5rem;
-  max-width: 350%;
+  max-width: 400%;
   border-radius: .3rem;
-  text-align: center;
+  text-align: justify;
+  font-size: medium;
   position: absolute;
 }
 

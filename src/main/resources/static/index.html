@@ -24,16 +24,16 @@
                 <div class="control" style="padding-right: 1em">
                     <div class="select is-rounded">
                         <select v-model="feature">
-                            <option value="products_without_fulltext">Products Without Full Text Search</option>
-                            <option value="products_only">Products With Full Text Search</option>
-                            <option value="products_with_filtered_aggs">Products & Selectable filtered Aggs</option>
-                            <option value="products_with_filtered_aggs_with_boost">Products & Selectable filtered Aggs with Boost</option>
+                            <option value="pets_without_fulltext">Pets Without Full Text Search</option>
+                            <option value="pets_only">Pets With Full Text Search</option>
+                            <option value="pets_with_filtered_aggs">Pets & Selectable filtered Aggs</option>
+                            <option value="pets_with_filtered_aggs_with_boost">Pets & Selectable filtered Aggs with Boost</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="field has-addons" style="padding-right: 1em">
-                    <template v-if="feature != 'products_without_fulltext'">
+                    <template v-if="feature != 'pets_without_fulltext'">
                     <div class="control">
                         <input v-model="query" v-on:keyup.enter="search" class="input is-primary is-rounded"/>
                     </div>
@@ -62,7 +62,7 @@
                             <div class="is-size-7 aggregation">
                                 <div class="is-size-5"><b>Type</b></div>
                                 <ul>
-                                    <template v-if="feature != 'products_with_aggs'">
+                                    <template v-if="feature != 'pets_with_aggs'">
                                         <template v-if="searchResponse.aggregations.by_type.buckets != null">
                                             <li v-for="bucket in searchResponse.aggregations.by_type.buckets">
                                                 <a v-on:click="filters.push({ 'key': 'Type', 'value': bucket.key, 'type': 'term'})">{{ bucket.key }}</a> ({{ bucket.doc_count }})
@@ -85,7 +85,7 @@
                             <div class="is-size-7 aggregation">
                                 <div class="is-size-5"><b>Size</b></div>
                                 <ul>
-                                    <template v-if="feature != 'products_with_aggs'">
+                                    <template v-if="feature != 'pets_with_aggs'">
                                         <template v-if="searchResponse.aggregations.by_size.buckets != null">
                                             <li v-for="bucket in searchResponse.aggregations.by_size.buckets">
                                                 <a v-on:click="filters.push({ 'key': 'MaturitySize', 'value': bucket.key, 'type': 'term'})">{{ bucket.key }}</a> ({{ bucket.doc_count }})
@@ -108,7 +108,7 @@
                             <div class="is-size-7 aggregation">
                                 <div class="is-size-5"><b>Vaccination</b></div>
                                 <ul>
-                                    <template v-if="feature != 'products_with_aggs'">
+                                    <template v-if="feature != 'pets_with_aggs'">
                                         <template v-if="searchResponse.aggregations.by_vaccinated.buckets != null">
                                             <li v-for="bucket in searchResponse.aggregations.by_vaccinated.buckets">
                                                 <a v-on:click="filters.push({ 'key': 'Vaccinated', 'value': bucket.key, 'type': 'term'})">{{ bucket.key }}</a> ({{ bucket.doc_count }})

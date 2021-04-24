@@ -4,34 +4,15 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Random;
 
+/**
+ * Generate a random date for ES to do the ranking based on dates
+ */
 public class GenerateRandomDate {
 
     public GenerateRandomDate() {
     }
 
     public Date generateDate(){
-//        // Declare DateTimeFormatter with desired format
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//
-//        // Save current LocalDateTime into a variable
-//        LocalDateTime localDateTime = LocalDateTime.now();
-//
-//        // Format LocalDateTime into a String variable and print
-//        String formattedLocalDateTime = localDateTime.format(dateTimeFormatter);
-//        System.out.println("Current Date: " + formattedLocalDateTime);
-//
-//        //Get random amount of days between 0 and 365
-//        Random random = new Random();
-//        int randomAmountOfDays = random.nextInt(365 - 0 + 1) + 0;
-//        System.out.println("Random amount of days: " + randomAmountOfDays);
-//
-//        // Add randomAmountOfDays to LocalDateTime variable we defined earlier and store it into a new variable
-//        LocalDateTime futureLocalDateTime = localDateTime.minusDays(randomAmountOfDays);
-//
-//        // Format new LocalDateTime variable into a String variable and print
-//        String formattedFutureLocalDateTime = futureLocalDateTime.format(dateTimeFormatter);
-//        System.out.println("Date " + randomAmountOfDays + " days in future: " + formattedFutureLocalDateTime);
-
         Random  rnd = new Random();
         Date dt;
         long ms;
@@ -45,9 +26,5 @@ public class GenerateRandomDate {
         dt = new Date(ms);
         // Construct a date
         return dt;
-
-
     }
-
-
 }

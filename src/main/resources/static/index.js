@@ -5,7 +5,7 @@ Vue.filter('format', function (value) {
 var app = new Vue({
     el: '#app',
     data: {
-        feature: "products_without_fulltext", // default search feature
+        feature: "pets_without_fulltext", // default search feature
         query: "cutie", // default search term
         searchResponse: null,
         filters: [],
@@ -13,17 +13,17 @@ var app = new Vue({
         age_from: null,
         age_to: null,
         features : {
-          products_without_fulltext : {
-            url : "products_without_fulltext"
+          pets_without_fulltext : {
+            url : "pets_without_fulltext"
           },
-          products_only : {
-            url : "products_only"
+          pets_only : {
+            url : "pets_only"
           },
-          products_with_filtered_aggs : {
-            url : "products_with_filtered_aggs"
+          pets_with_filtered_aggs : {
+            url : "pets_with_filtered_aggs"
           },
-          products_with_filtered_aggs_with_boost : {
-             url : "products_with_filtered_aggs_with_boost"
+          pets_with_filtered_aggs_with_boost : {
+             url : "pets_with_filtered_aggs_with_boost"
           }
         }
     },
@@ -42,7 +42,7 @@ var app = new Vue({
     },
     methods: {
       add_age_filter : function() {
-        console.log("GOT AGE", this.age_from, " TO ", this.age_to)
+        console.log("FILTER AGE: ", this.age_from, " TO ", this.age_to)
         index = this.filters.findIndex( function(e) { return e.key == "Age" } )
         lower = this.age_from !== null ? this.age_from : ""
         upper = this.age_to !== null ? this.age_to : ""

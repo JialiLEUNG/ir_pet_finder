@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 @Controller("/search")
 public class SearchController {
 
-//    private final ProductQueryService service;
 private final PetQueryService service;
 
     @Inject
@@ -24,30 +23,23 @@ private final PetQueryService service;
         this.service = service;
     }
 
-    @Post(value = "products_without_fulltext", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    @Post(value = "pets_without_fulltext", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     public CompletableFuture<Response> searchWithoutFullText(@Body Query query) throws IOException, ExecutionException, InterruptedException {
         return service.searchWithFilteredAggs(query, false, false);
     }
 
-    @Post(value = "products_only", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-    public CompletableFuture<Response> searchProductsOnly(@Body Query query) throws IOException, ExecutionException, InterruptedException {
-        return service.searchProductsOnly(query);
+    @Post(value = "pets_only", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    public CompletableFuture<Response> searchPetsOnly(@Body Query query) throws IOException, ExecutionException, InterruptedException {
+        return service.searchPetsOnly(query);
     }
 
-//    @Post(value = "products_with_aggs", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-//    public CompletableFuture<Response> searchWithAggs(@Body Query query) throws IOException, ExecutionException, InterruptedException {
-//        return service.searchWithAggs(query);
-//    }
-
-    @Post(value = "products_with_filtered_aggs", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    @Post(value = "pets_with_filtered_aggs", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     public CompletableFuture<Response> searchWithFilteredAggs(@Body Query query) throws IOException, ExecutionException, InterruptedException {
         return service.searchWithFilteredAggs(query, false, true);
     }
 
-    @Post(value = "products_with_filtered_aggs_with_boost", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    @Post(value = "pets_with_filtered_aggs_with_boost", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     public CompletableFuture<Response> searchWithFilteredAggsWithBoost(@Body Query query) throws IOException, ExecutionException, InterruptedException {
         return service.searchWithFilteredAggs(query, true, true);
     }
-
-
 }

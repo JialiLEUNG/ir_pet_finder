@@ -94,32 +94,6 @@ public class PetDeserializer extends JsonDeserializer<Pet> {
         if (petNode.has("ImageDir")){
             pet.setPetID(petNode.get("ImageDir").textValue());
         }
-
         return pet;
     }
-
 }
-
-//  String[] variables = {
-//                "Type",
-//                "Name",
-//                "Age",
-//                "Breed1",
-//                "Breed2",
-//                "Gender",
-//                "Color1",
-//                "Color2",
-//                "Color3",
-//                "MaturitySize",
-//                "FurLength",
-//                "Vaccinated",
-//                "Dewormed",
-//                "Sterilized",
-//                "Health",
-//                "Quantity",
-//                "Fee",
-//                "State",
-//                "RescuerID",
-//                "VideoAmt",
-//                "Description",
-//                "PhotoAmt"};

@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 /**
  * PetQueryService is to generate query request to ES
  * https://www.elastic.co/guide/en/elasticsearch/client/java-rest/master/java-rest-high-query-builders.html
+ * This builds a client to consume the endpoints we creates (e.g., pets_without_fulltext).
  */
 @Singleton
 public class PetQueryService {
@@ -68,7 +69,7 @@ public class PetQueryService {
      * @return
      * @throws IOException
      */
-    public CompletableFuture<Response> searchProductsOnly(Query query) throws IOException, ExecutionException, InterruptedException {
+    public CompletableFuture<Response> searchPetsOnly(Query query) throws IOException, ExecutionException, InterruptedException {
         return asyncSearch(createFullTextSearchQuery(query), null, query.getFrom());
     }
 
@@ -256,7 +257,7 @@ public class PetQueryService {
                 .minimumShouldMatch("66%")
                 .fuzziness(Fuzziness.AUTO));
 
-        // increase scoring if we match in color, brand or material compared to product name
+        // increase scoring if we match in color, brand or material compared to pet name
 //        queryBuilder.should(QueryBuilders.matchQuery("Description", query.getQuery()));
 //        queryBuilder.should(QueryBuilders.matchQuery("Breed1", query.getQuery()));
 //        queryBuilder.should(QueryBuilders.matchQuery("Breed2", query.getQuery()));
@@ -294,12 +295,6 @@ public class PetQueryService {
                 .field("Description", 1.0f) // default is 1.0f
                 .field("Breeds", 1.0f)
                 .field("Colors", 1.0f)
-                // "age","breed1", "breed2",
-                //            "color1","color2","color3", "dewormed", "fee",
-                //            "furLength", "gender", "description", "health",
-                //            "maturitySize", "name", "photoAmt", "quantity",
-                //            "rescuerId", "videoAmt", "vaccinated", "sterilized",
-                //            "type", "state", "imageDir", "lastUpdated"
                 .field("furLength", 1.0f)
                 .field("health", 1.0f)
                 .field("sterilized", 1.0f)
@@ -322,14 +317,8 @@ public class PetQueryService {
         Random rnd = new Random();
         // current time
         long currentTimestamp = Instant.now().toEpochMilli();
-        // minus up to 1/12 years to it (using modulus on the next long)
-        // minus 30 days to currentTimestamp
-//        double pastTimestamp = currentTimestamp - (Math.abs(rnd.nextLong()) % (0.1 * 1L * 365 * 24 * 60 * 60 * 1000));
-//        double pastTimestamp = currentTimestamp - TimeUnit.DAYS.toMillis(30);
         // subtract 30 DAYS to Instant
         long pastTimestamp = Instant.ofEpochMilli(currentTimestamp).atZone(ZoneId.systemDefault()).minusDays(30).toEpochSecond() * 1000;
-        System.out.println("===== past: " + pastTimestamp);
-        System.out.println("===== curr: " + currentTimestamp);
         queryBuilder.should(QueryBuilders.rangeQuery("LastUpdated")
                 .gt(pastTimestamp)
 //                .lt(currentTimestamp)
@@ -357,7 +346,7 @@ public class PetQueryService {
 //        RankFeatureQueryBuilders lastUpdatedRankQuery = new RankFeatureQueryBuilders();
 //        queryBuilder.should()
 
-        // increase scoring if we match in color, brand or material compared to product name
+        // increase scoring if we match in color, brand or material compared to pet name
 //        queryBuilder.should(QueryBuilders.matchQuery("Description", query.getQuery()));
 //        queryBuilder.should(QueryBuilders.matchQuery("Breed1", query.getQuery()));
 //        queryBuilder.should(QueryBuilders.matchQuery("Breed2", query.getQuery()));
