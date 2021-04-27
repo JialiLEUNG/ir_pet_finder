@@ -35,7 +35,6 @@ public class PetServiceImpl implements PetService {
     private final ObjectMapper mapper;
     private static final Logger LOG = LoggerFactory.getLogger(PetServiceImpl.class);
 
-
     public PetServiceImpl(String index, RestHighLevelClient client) {
         this.index = index;
         this.client = client;

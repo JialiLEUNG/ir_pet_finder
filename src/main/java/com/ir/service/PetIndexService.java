@@ -1,6 +1,7 @@
 package com.ir.service;
 
 import com.ir.classes.FileConst;
+import com.ir.controller.AdminController;
 import com.ir.dataPreProcess.*;
 import com.ir.entities.Pet;
 import io.micronaut.http.HttpStatus;
@@ -14,14 +15,18 @@ import org.elasticsearch.client.NodeSelector;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CloseIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.GetIndexRequest;
+import org.elasticsearch.common.io.Streams;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -35,6 +40,7 @@ public class PetIndexService {
     private static final String index = "my_index";
     private static RestHighLevelClient client;
     private static PetServiceImpl petService;
+    private static final Logger LOG = LoggerFactory.getLogger(PetIndexService.class);
 
     @Inject
     public PetIndexService(RestHighLevelClient client) {
@@ -80,11 +86,9 @@ public class PetIndexService {
                 petPreIndex();
                 startPetService();
                 deletePetIndex();
-
+                setUpSynonymRequest();
                 List<Pet> pets = WriteIndex();
-
                 petService.save(pets);
-
                 client.indices().refresh(new RefreshRequest(index), RequestOptions.DEFAULT);
                 return HttpStatus.OK;
             } catch (IOException e) {
@@ -103,9 +107,12 @@ public class PetIndexService {
             // When executing a DeleteIndexRequest in the following manner,
             // the client waits for the DeleteIndexResponse to be returned
             // before continuing with code execution:
-            client.indices()
-                    .delete(new DeleteIndexRequest(index),
-                            RequestOptions.DEFAULT);
+            boolean indexExists = client.indices().exists(new GetIndexRequest(index), RequestOptions.DEFAULT);
+            if (indexExists){
+                client.indices().delete(new DeleteIndexRequest(index),
+                                RequestOptions.DEFAULT);
+            }
+
         } catch (ElasticsearchStatusException e) {
             // If the index was not found,
             // an ElasticsearchException will be thrown:
@@ -211,7 +218,7 @@ public class PetIndexService {
         FilePathGenerator fpg = new FilePathGenerator("result.txt");
         String path = fpg.getPath();
 
-        FileWriter fileWriter = new FileWriter(path, false);
+        FileWriter fileWriter = new FileWriter(path, true);
         Map<String, Map<String, String>> curr_docs = corpus.nextDoc(); // doc_id:doc_content pairs
         Set<String> doc_ids = curr_docs.keySet();
         for (String doc_id : doc_ids){
@@ -288,6 +295,18 @@ public class PetIndexService {
         return petList;
     }
 
+    private void setUpSynonymRequest(){
+        try (Reader readerSettings = new InputStreamReader(this.getClass().getResourceAsStream("/index-settings.json"));
+             Reader readerMappings = new InputStreamReader(this.getClass().getResourceAsStream("/index-mappings.json"))) {
+            String settings = Streams.copyToString(readerSettings);
+            String mapping = Streams.copyToString(readerMappings);
+            CreateIndexRequest createIndexRequest = new CreateIndexRequest(index).settings(settings, XContentType.JSON).mapping(mapping, XContentType.JSON);
+            client.indices().create(createIndexRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private String[] getBreedsOrColors(String myString){
         String[] myArray = myString.split(",");
         List<String> myList = Arrays.asList(myArray);
@@ -320,11 +339,13 @@ public class PetIndexService {
      * @return
      */
     public CompletableFuture<HttpStatus> configureSynonyms(String synonyms){
+        String lowercasedSyn = synonyms.toLowerCase(Locale.ROOT);
+        LOG.info("SYNONYM | [{}] ", lowercasedSyn);
         return CompletableFuture.supplyAsync(() -> {
             try {
                 client.indices().close(new CloseIndexRequest(index), RequestOptions.DEFAULT);
                 Settings settings = Settings.builder()
-                        .putList("index.analysis.filter.my_synonym_filter.synonyms", synonyms.split("\n"))
+                        .putList("index.analysis.filter.my_synonym_filter.synonyms", lowercasedSyn.split("\n"))
                         .build();
                 client.indices().putSettings(new UpdateSettingsRequest(index).settings(settings), RequestOptions.DEFAULT);
                 client.indices().open(new OpenIndexRequest().indices(index), RequestOptions.DEFAULT);

@@ -6,7 +6,7 @@ var app = new Vue({
     el: '#app',
     data: {
         feature: "pets_without_fulltext", // default search feature
-        query: "cutie", // default search term
+        query: "cute huskie", // default search term
         searchResponse: null,
         filters: [],
         from : 0,

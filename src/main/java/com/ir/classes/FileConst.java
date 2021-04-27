@@ -16,10 +16,10 @@ public class FileConst {
             "StateLabels.csv"
     };
     public static String[] dataFile = {
-            "test.csv"
+            "test.csv",
+            "train.csv"
     };
     public static int number_of_fields = fields.length;
-    public static int query_doc_id = 9999999;
 
     private int topK_relevant_doc;
 

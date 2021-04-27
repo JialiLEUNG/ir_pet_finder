@@ -47,9 +47,6 @@ public class PetSerializer extends JsonSerializer<Pet> {
         jsonGenerator.writeStringField("PhotoAmt", pet.getPhotoAmt());
         jsonGenerator.writeStringField("Description", pet.getDescription());
         jsonGenerator.writeStringField("ImageDir", pet.getImageDir());
-//        jsonGenerator.writeNumberField("LastUpdated", pet.getLastUpdated());
-//        System.out.println("$$$$$$$ start an object");
-//        jsonGenerator.writeStartObject();
         jsonGenerator.writeFieldName("LastUpdated");
         jsonGenerator.writeObject(pet.getLastUpdated());
         jsonGenerator.writeStringField("LastUpdatedStr", pet.getLastUpdatedStr().substring(3,11) + pet.getLastUpdatedStr().substring(pet.getLastUpdatedStr().length() - 4));

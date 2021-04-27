@@ -322,7 +322,7 @@ public class PetQueryService {
         queryBuilder.should(QueryBuilders.rangeQuery("LastUpdated")
                 .gt(pastTimestamp)
 //                .lt(currentTimestamp)
-                .boost(1.3f));
+                .boost(1.5f));
 
 
         // TODO: Using distance_feature to boost relevance score based on proximity of lastUpdated dates.

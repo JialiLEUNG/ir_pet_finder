@@ -24,10 +24,10 @@
                 <div class="control" style="padding-right: 1em">
                     <div class="select is-rounded">
                         <select v-model="feature">
-                            <option value="pets_without_fulltext">Pets Without Full Text Search</option>
-                            <option value="pets_only">Pets With Full Text Search</option>
-                            <option value="pets_with_filtered_aggs">Pets & Selectable filtered Aggs</option>
-                            <option value="pets_with_filtered_aggs_with_boost">Pets & Selectable filtered Aggs with Boost</option>
+                            <option value="pets_without_fulltext">Pets with Filter Only</option>
+                            <option value="pets_only">Pets with Full-Text Search Only</option>
+                            <option value="pets_with_filtered_aggs">Pets with Filtered Aggs & Full-Text Search </option>
+                            <option value="pets_with_filtered_aggs_with_boost">Pets with Filtered Aggs & Full-Text Search with Boost</option>
                         </select>
                     </div>
                 </div>
@@ -167,7 +167,7 @@
 
                     <div class="column results">
                         <template v-if="searchResponse.hits.total.value > 0">
-                            <h1>Results {{ searchResponse.hits.total.relation }} {{ searchResponse.hits.total.value }}</h1>
+                            <h1>Results: {{ searchResponse.hits.total.value }}</h1>
                         </template>
                         <template v-else>
                             No Pets found
@@ -190,14 +190,17 @@
                                                     />
 
                                                 </div>
-
                                                 <!--                                            <img src="./image/0a3d2b273.jpg" />-->
                                             </figure>
                                         </div>
                                         <div class="card-content">
                                             <div class="media-content">
-                                                <p class="title is-6">{{ hit._source.Name }}</p>
-                                                <!--                                                <p class="subtitle is-7"><a v-on:click="filters.push({ 'key': 'brand', 'value': hit._source.brand, 'type': 'term'})">by {{ hit._source.brand }}</a></p>-->
+                                                <template v-if="hit._source.Name == '' ">
+                                                    <p class="title is-6"> Name Unknown</p>
+                                                </template>
+                                                <template v-else>
+                                                    <p class="title is-6">{{ hit._source.Name }}</p>
+                                                </template>
                                                 <p class="subtitle is-7"><b>{{ hit._source.Age }} Months</b></p>
                                             </div>
                                         </div>

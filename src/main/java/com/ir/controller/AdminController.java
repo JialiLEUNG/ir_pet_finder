@@ -45,7 +45,6 @@ public class AdminController {
         if (numberOfPets <= 0) {
             numberOfPets = 50000;
         }
-
         return indexService.indexPets(numberOfPets);
     }
 

@@ -8,7 +8,6 @@ import com.ir.models.Color;
 import com.ir.models.State;
 import com.ir.models.Record;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -123,12 +122,6 @@ public class CsvFileCollection implements DocCollection{
             recordMap.put("imageDir", "./image/" + docId + ".jpg");
             recordMap.put("lastUpdated", String.valueOf(bean.getLastUpdated()));
 
-//            if (bean.getImageDir() == null){
-////                recordMap.put("imageDir", getXMLdirectory("static/image", docId));
-//                recordMap.put("imageDir", docId);
-//            }
-//
-
             if (bean.getFee() == null){
                 recordMap.put("fee", "");
             } else if (bean.getFee().equals("0")) {
@@ -142,25 +135,6 @@ public class CsvFileCollection implements DocCollection{
             docMap.put(docId, recordMap);
         }
         return docMap;
-    }
-
-    public String getXMLdirectory(String folderName, String petId){
-        // "static/csv" == folderName
-        ClassLoader classLoader = getClass().getClassLoader();
-        String path  = Objects.requireNonNull(classLoader.getResource(folderName)).getPath();
-        File dir = new File(path); //Directory where xml file exists
-        File[] files = dir.listFiles();
-        String paths = "";
-
-
-        for(File file : files) {
-            // You can validate file name with extension if needed
-
-            if (file.isFile() && file.getName().equals(petId + ".jpg")){
-                paths = file.toString();
-            }
-        }
-        return paths;
     }
 
 }
